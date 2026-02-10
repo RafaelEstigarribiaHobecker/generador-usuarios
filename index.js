@@ -23,24 +23,56 @@ const filtrarAvanzado = (lista, propiedad, operador, valor) => {
 };
 
 
-// Buscar por carrera
+/**
+ * Calcular el promedio de una lista de alumnos.
+ */
+const calcularPromedioGeneral = (lista) => {
+    // Usamos 'map' para quedarnos solo con los números de los promedios
+    const promedios = lista.map(alumno => alumno.promedio);
 
-console.log("--- Alumnos de Informática ---");
-console.table(buscarAlumnos(alumnos, "carrera", "Informática"));
+    //Usamos 'reduce' para sumarlos todos y dividir por la cantidad
+    const sumaTotal = promedios.reduce((acumulado, actual) => acumulado + actual, 0);
 
-//Buscar por semestre
+    return (sumaTotal / lista.length).toFixed(2);
+};
 
-console.log("--- Alumnos del 3er Semestre ---");
-console.table(buscarAlumnos(alumnos, "semestre", 3));
+console.log(`--- Promedio General de la Facultad: ${calcularPromedioGeneral(alumnos)} ---`);
+
+const inscribirAlumno = (lista, nombre, carrera, semestre, promedio) => {
+    const nuevoAlumno = {
+        id: lista.length + 1, //Generamos el ID automáticamente
+        nombre,
+        carrera,
+        semestre,
+        promedio
+    };
+    lista.push(nuevoAlumno);
+    console.log(`✅  ${nombre} ha sido inscripto/a exitosamente.`);
+
+};
+
+inscribirAlumno(alumnos, "Sofia", "Informatica", 1, 4.8);
+
+console.log(`--- Promedio General de la Facultad: ${calcularPromedioGeneral(alumnos)} ---`);
 
 
-//Promedio Mayor a 4.0
-console.log("--- Alumnos con promedio mayor a 4.0 ---");
-console.table(filtrarAvanzado(alumnos, "promedio", ">", 4.0));
+console.table(alumnos);
 
+// Eliminar por ID usando splice
 
-//Alumnos de Semestres Iniciales(menor al 4to)
+const darDeBaja = (lista, id) => {
+    const indice = lista.findIndex(alumno => alumno.id === id);
 
-console.log("--- Alumnos de semestres iniciales (menor al 4to) ---");
-console.table(filtrarAvanzado(alumnos, "semestre", "<", 4));
+    if (indice !== -1) {
+        lista.splice(indice, 1);
+        console.log(`❌ Alumno/a con ID ${id} eliminado del sistema.`);
+    } else {
+        console.log("⚠️ No se encontró al alumno/a.")
+    }
+};
 
+darDeBaja(alumnos, 2); //Chau Ana (ID 2)
+
+console.table(alumnos);
+
+console.log(`--- Promedio General de la Facultad: ${calcularPromedioGeneral(alumnos)} ---`);
